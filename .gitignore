@@ -1,21 +1,35 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+env/
+venv/
 
 # Django
-*.log
-*.pot
-*.pyc
 *.sqlite3
+db.sqlite3
 media/
 staticfiles/
-.env
+*.log
 
-# PyCharm
+# VS Code / PyCharm
+.vscode/
 .idea/
 
-# VSCode (if using)
-.vscode/
+# OS
+.DS_Store
+Thumbs.db
 
-# Migrations
-**/migrations/
+# Tailwind CSS output (if any generated)
+tailwind.css
+tailwind.min.css
+tailwindcss.exe
+
+# Node + Tailwind (if used)
+node_modules/
+build/
+dist/
