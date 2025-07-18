@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to WellNest+{% endblock %}
+
+{% block content %}
+<section class="text-center py-24 px-6">
+  <h1 class="text-4xl md:text-5xl font-extrabold text-green-700 mb-4" data-aos="fade-down">
+    Welcome to WellNest+
+  </h1>
+  <p class="text-lg text-gray-700 max-w-xl mx-auto" data-aos="fade-up">
+    Your personal health assistant powered by AI – designed for doctors and patients alike.
+  </p>
+
+  <div class="mt-6 space-x-4" data-aos="zoom-in">
+    <a href="{% url 'register_patient' %}" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded-lg transition shadow">
+      Register as Patient
+    </a>
+    <a href="{% url 'register_doctor' %}" class="bg-green-600 hover:bg-green-700 text-white py-2 px-5 rounded-lg transition shadow">
+      Register as Doctor
+    </a>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-20 bg-white">
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center text-green-700 mb-10" data-aos="fade-up">Why Choose WellNest+</h2>
+    <div class="grid md:grid-cols-3 gap-10 text-center">
+      <div class="bg-green-50 p-6 rounded-xl shadow" data-aos="fade-up">
+        <i class="fas fa-stethoscope text-4xl text-green-600 mb-3"></i>
+        <h4 class="text-xl font-semibold">AI Symptom Checker</h4>
+        <p class="text-sm text-gray-600 mt-2">Check symptoms instantly with AI-powered predictions.</p>
+      </div>
+      <div class="bg-blue-50 p-6 rounded-xl shadow" data-aos="fade-up" data-aos-delay="150">
+        <i class="fas fa-calendar-check text-4xl text-blue-600 mb-3"></i>
+        <h4 class="text-xl font-semibold">Book Appointments</h4>
+        <p class="text-sm text-gray-600 mt-2">Schedule with trusted doctors easily and quickly.</p>
+      </div>
+      <div class="bg-purple-50 p-6 rounded-xl shadow" data-aos="fade-up" data-aos-delay="300">
+        <i class="fas fa-notes-medical text-4xl text-purple-600 mb-3"></i>
+        <h4 class="text-xl font-semibold">Medical Records</h4>
+        <p class="text-sm text-gray-600 mt-2">Keep all your checkup and diagnosis records securely.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="reviews" class="py-20 bg-gradient-to-tr from-green-50 to-blue-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-bold text-center text-green-700 mb-12" data-aos="fade-up">What Our Users Say</h2>
+    <div class="space-y-10">
+      <div class="bg-white p-6 rounded-xl shadow" data-aos="fade-up">
+        <p class="italic text-gray-700">"WellNest+ helped me understand my symptoms and book the right doctor in minutes."</p>
+        <p class="mt-2 text-sm text-right text-green-700">– Riya, Patient</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow" data-aos="fade-up" data-aos-delay="150">
+        <p class="italic text-gray-700">"As a doctor, I can manage my appointments and view patient history with ease."</p>
+        <p class="mt-2 text-sm text-right text-blue-700">– Dr. Singh</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact or CTA -->
+<section id="contact" class="py-20 text-center bg-white">
+  <h2 class="text-2xl font-bold text-green-700 mb-4" data-aos="fade-up">Ready to get started?</h2>
+  <p class="text-gray-600 mb-6" data-aos="fade-up" data-aos-delay="100">Join WellNest+ and experience smarter healthcare today.</p>
+  <a href="{% url 'register_patient' %}" class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow transition" data-aos="zoom-in">
+    Get Started Now
+  </a>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'dashboard/base_doctor.html' %}
+{% block title %}Profile | WellNest+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-xl shadow">
+  <h2 class="text-2xl font-bold text-green-700 mb-6">👤 My Profile</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+        <a href="{% url 'edit_doctor_profile' %}" class="mt-4 inline-block px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+  ✏️ Edit Profile
+</a>
+
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">Personal Details</h3>
+      <p><strong>Name:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Phone:</strong> {{ user.phone }}</p>
+    </div>
+
+    <div>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">About</h3>
+{% if is_doctor %}
+  <p>You are logged in as a <strong>Doctor</strong>.</p>
+  <ul class="list-disc ml-4 text-sm text-gray-700 mt-2">
+    <li><strong>Specialization:</strong> {{ doctor.specialization }}</li>
+    <li><strong>Available Days:</strong> {{ doctor.available_days }}</li>
+    <li><strong>Available Time:</strong> {{ doctor.availability_time }}</li>
+    <li><strong>Standard Fee:</strong> ₹{{ doctor.standard_fee }}</li>
+    <li><strong>Special Fee:</strong> ₹{{ doctor.special_fee }}</li>
+    <li><strong>Contact Info:</strong> {{ doctor.contact }}</li>
+  </ul>
+{% endif %}
+
+    </div>
+  </div>
+<div class="mt-6">
+    <a href="{% url 'logout' %}" onclick="return confirm('Are you sure you want to log out?')">
+        <form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+    🚪 Logout
+  </button>
+</form>
+</a>
+</div>
+
+</div>
+{% endblock %}

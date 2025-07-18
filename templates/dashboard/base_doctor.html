@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor - WellNest+</title>
+  {% load static %}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- Doctor Navbar -->
+<nav class="flex items-center justify-between px-6 py-4 bg-white shadow-md">
+  <div class="text-xl font-semibold text-indigo-600">WellNest+</div>
+
+  <div class="flex items-center space-x-6">
+    <!-- Navigation Links -->
+    <a href="{% url 'doctor_dashboard' %}" class="hover:text-indigo-600 font-medium">Dashboard</a>
+    <a href="#" class="hover:text-indigo-600 font-medium">Appointments</a>
+    <a href="#" class="hover:text-indigo-600 font-medium">Patient Records</a>
+
+    <!-- Notification Icon -->
+    <a href="#" class="relative">
+      <i class="fas fa-bell text-gray-600 text-xl"></i>
+      <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+    </a>
+
+
+    <!-- Profile Photo -->
+    <a href="{% url 'profile' %}">
+  {% if request.user.is_authenticated and request.user.profile_photo %}
+    <img src="{{ request.user.profile_photo.url }}" class="w-10 h-10 rounded-full object-cover border border-gray-300" alt="Profile">
+  {% else %}
+    <img src="{% static 'default.png' %}" class="w-10 h-10 rounded-full object-cover border border-gray-300" alt="Profile">
+  {% endif %}
+</a>
+
+  </div>
+</nav>
+
+<!-- Page Content -->
+<main class="p-6 max-w-6xl mx-auto">
+  {% block content %}{% endblock %}
+</main>
+
+<!-- ✅ Add this for scripts -->
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Login | WellNest+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-[80vh]">
+  <div class="bg-white shadow-lg rounded-xl w-full max-w-md p-8">
+    <h2 class="text-2xl font-bold text-center text-green-700 mb-6">
+      <i class="fas fa-sign-in-alt"></i> Login to WellNest+
+    </h2>
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <!-- Email Field -->
+      <div class="mb-4">
+        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700">Email Address</label>
+        {{ form.email }}
+        {% for error in form.email.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Password Field with toggle -->
+      <div class="mb-4">
+        <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="relative">
+          {{ form.password }}
+          <button type="button"
+                  class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm"
+                  onclick="togglePassword()">
+            👁️
+          </button>
+        </div>
+        {% for error in form.password.errors %}
+          <p class="text-sm text-red-600">{{ error }}</p>
+        {% endfor %}
+      </div>
+
+      <!-- Non-field Errors (like invalid credentials) -->
+      {% if form.non_field_errors %}
+        <div class="mb-4">
+          {% for error in form.non_field_errors %}
+            <p class="text-sm text-red-600 italic">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <div class="flex justify-between items-center mb-4">
+        <a href="#" class="text-sm text-green-600 hover:underline">Forgot Password?</a>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition">
+        Login
+      </button>
+    </form>
+
+    <p class="text-sm text-center mt-4">
+      New user?
+      <a href="{% url 'register_patient' %}" class="text-green-600 hover:underline">Register here</a>
+    </p>
+  </div>
+</div>
+
+<!-- Show/Hide Password Script -->
+<script>
+  function togglePassword() {
+    const passwordField = document.getElementById("id_password");
+    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+  }
+</script>
+{% endblock %}

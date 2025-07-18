@@ -1,0 +1,209 @@
+{% extends "dashboard/base_doctor.html" %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<div class="p-6 space-y-6">
+  <!-- Greeting -->
+  <h1 class="text-3xl font-bold text-gray-800">
+    👋 Welcome, Dr. {{ doctor.user.first_name|default:"" }} {{ doctor.user.last_name|default:doctor.user.username|default:"Doctor" }}!
+  </h1>
+
+  <!-- Stats Overview -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="bg-white shadow rounded-xl p-5">
+      <p class="text-gray-500">Appointments Today</p>
+      <h2 class="text-3xl font-bold text-indigo-600">{{ appointments_today_count }}</h2>
+    </div>
+    <div class="bg-white shadow rounded-xl p-5">
+      <p class="text-gray-500">Patients This Week</p>
+      <h2 class="text-3xl font-bold text-green-600">{{ patients_this_week }}</h2>
+    </div>
+    <div class="bg-white shadow rounded-xl p-5">
+      <p class="text-gray-500">Total Patients</p>
+      <h2 class="text-3xl font-bold text-rose-600">{{ total_patients }}</h2>
+    </div>
+  </div>
+
+  <!-- Filter Form -->
+  <form method="get" class="flex flex-wrap gap-4 mb-6 items-end">
+    <div>
+      <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+      <input type="date" id="date" name="date" value="{{ query_date }}" class="border rounded px-3 py-2 w-full">
+    </div>
+    <div>
+      <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+      <select name="status" id="status" class="border rounded px-3 py-2 w-full">
+        <option value="">All</option>
+        <option value="CONFIRMED" {% if query_status == "CONFIRMED" %}selected{% endif %}>Confirmed</option>
+        <option value="PENDING" {% if query_status == "PENDING" %}selected{% endif %}>Pending</option>
+      </select>
+    </div>
+    <div>
+      <label for="patient" class="block text-sm font-medium text-gray-700">Patient</label>
+      <input type="text" id="patient" name="patient" placeholder="Patient name" value="{{ query_patient }}" class="border rounded px-3 py-2 w-full">
+    </div>
+    <div>
+      <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">🔍 Filter</button>
+      <a href="{% url 'doctor_dashboard' %}" class="ml-2 text-sm text-gray-600 underline">Clear</a>
+    </div>
+  </form>
+
+  <!-- Appointments Card View -->
+<div class="bg-white shadow rounded-xl p-6">
+  <h2 class="text-xl font-semibold mb-4">📅 Upcoming Appointments</h2>
+
+  {% if upcoming_appointments %}
+    {% for appointment in upcoming_appointments %}
+      <div class="bg-white p-4 mb-4 border rounded-md shadow-sm">
+        <h3 class="text-lg font-semibold text-indigo-700">{{ appointment.patient.get_full_name }}</h3>
+        <p class="text-sm text-gray-700">📅 {{ appointment.date }} | 🕒 {{ appointment.time }}</p>
+        <p class="text-sm text-gray-600">📝 {{ appointment.reason }}</p>
+
+        <!-- Status Badge -->
+        <div class="mt-2">
+          <span class="inline-block px-2 py-1 text-xs font-semibold rounded
+            {% if appointment.status == 'CONFIRMED' %}
+              bg-green-100 text-green-700
+            {% elif appointment.status == 'CANCELLED' %}
+              bg-red-100 text-red-700
+            {% else %}
+              bg-yellow-100 text-yellow-700
+            {% endif %}">
+            {{ appointment.status }}
+          </span>
+        </div>
+
+        <!-- Doctor Buttons: Confirm / Cancel -->
+        {% if appointment.status == 'PENDING' %}
+          <form method="post" action="{% url 'confirm_appointment' appointment.id %}" class="inline-block mt-2">
+            {% csrf_token %}
+            <button class="text-green-600 hover:underline mr-4" onclick="return confirm('Confirm this appointment?');">✅ Confirm</button>
+          </form>
+          <form method="post" action="{% url 'cancel_appointment' appointment.id %}" class="inline-block mt-2">
+            {% csrf_token %}
+            <button class="text-red-600 hover:underline" onclick="return confirm('Cancel this appointment?');">❌ Cancel</button>
+          </form>
+        {% elif appointment.status == 'CONFIRMED' %}
+          <span class="mt-2 inline-block text-green-700 font-semibold">✔ Already Confirmed</span>
+        {% elif appointment.status == 'CANCELLED' %}
+          <span class="mt-2 inline-block text-red-600 font-semibold italic">❌ Cancelled</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="text-gray-500 italic">No upcoming appointments.</p>
+  {% endif %}
+</div>
+
+
+  <!-- Charts and Health Tips -->
+  <div class="bg-white shadow rounded-xl p-6">
+    <h2 class="text-xl font-semibold mb-4">📈 Weekly Patient Visits</h2>
+    <div id="visitsChart" class="w-full h-64"></div>
+  </div>
+
+  <div class="bg-white shadow rounded-xl p-6 mt-6">
+    <h2 class="text-xl font-semibold mb-4">📊 Appointment Status</h2>
+    <div id="statusChart" class="w-full h-64"></div>
+  </div>
+
+  <div class="bg-white shadow rounded-xl p-6">
+    <h2 class="text-xl font-semibold mb-4">💡 Quick Health Tips</h2>
+    <ul class="list-disc ml-5 text-gray-700 space-y-2">
+      <li>Stay hydrated and get 8 hours of sleep.</li>
+      <li>Encourage regular health checkups.</li>
+      <li>Promote a balanced diet and physical activity.</li>
+    </ul>
+  </div>
+
+  <a href="{% url 'create_diagnosis' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mt-6 inline-block">➕ Add Diagnosis</a>
+
+  <div class="bg-white shadow rounded-xl p-6">
+    <h2 class="text-xl font-semibold mb-4">🧠 Recent Diagnoses</h2>
+    {% if recent_diagnoses %}
+      <ul class="divide-y divide-gray-200">
+        {% for diag in recent_diagnoses %}
+        <li class="py-2">
+          <strong class="text-gray-800">{{ diag.patient.first_name|default:diag.patient.username }}</strong> —
+          <span class="text-indigo-600">{{ diag.disease }}</span>
+          <span class="text-sm text-gray-500">({{ diag.created_at|date:"M d, Y" }})</span>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-gray-600">No recent diagnoses available.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Patient Modal -->
+<div id="patientModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50 flex items-center justify-center">
+  <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-6 relative">
+    <button id="closeModal" class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl">&times;</button>
+    <h2 class="text-2xl font-semibold mb-4">👤 Patient Details</h2>
+    <div id="modalContent" class="space-y-2 text-gray-700">
+      <p><strong>Name:</strong> <span id="patientName"></span></p>
+      <p><strong>Age:</strong> <span id="patientAge"></span></p>
+      <p><strong>Gender:</strong> <span id="patientGender"></span></p>
+      <p><strong>Last Diagnosis:</strong> <span id="lastDiagnosis"></span></p>
+      <p><strong>Recent Appointments:</strong></p>
+      <ul id="appointmentList" class="list-disc list-inside space-y-1 text-sm"></ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Weekly Patient Visits Chart
+  const visitsChart = new ApexCharts(document.querySelector("#visitsChart"), {
+    chart: { type: 'line', height: 300 },
+    series: [{ name: 'Patients', data: {{ weekly_visits_data|safe }} }],
+    xaxis: { categories: {{ weekly_visits_labels|safe }} },
+    stroke: { curve: 'smooth' },
+    colors: ['#6366f1']
+  });
+  visitsChart.render();
+
+  // Appointment Status Chart
+  const statusChart = new ApexCharts(document.querySelector("#statusChart"), {
+    chart: { type: 'donut', height: 300 },
+    series: [{{ confirmed_count }}, {{ pending_count }}],
+    labels: ['Confirmed', 'Pending'],
+    colors: ['#34d399', '#fbbf24']
+  });
+  statusChart.render();
+});
+
+// Patient Preview Modal
+function previewPatient(patientId) {
+  fetch(`/api/patient_preview/${patientId}/`)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("patientName").textContent = data.name || 'N/A';
+      document.getElementById("patientAge").textContent = data.age || 'N/A';
+      document.getElementById("patientGender").textContent = data.gender || 'N/A';
+      document.getElementById("lastDiagnosis").textContent = data.last_diagnosis || 'None';
+      const list = document.getElementById("appointmentList");
+      list.innerHTML = "";
+      if (data.appointments.length) {
+        data.appointments.forEach(app => {
+          const li = document.createElement("li");
+          li.textContent = `${app.date} at ${app.time} (${app.status})`;
+          list.appendChild(li);
+        });
+      } else {
+        list.innerHTML = "<li>No recent appointments.</li>";
+      }
+      document.getElementById("patientModal").classList.remove("hidden");
+    });
+}
+document.getElementById("closeModal").addEventListener("click", () => {
+  document.getElementById("patientModal").classList.add("hidden");
+});
+</script>
+{% endblock %}

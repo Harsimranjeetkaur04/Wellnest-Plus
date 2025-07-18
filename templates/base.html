@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}WellNest+{% endblock %}</title>
+
+  <link href="{% static 'fontawesome-free-6.7.2-web/css/all.css' %}" rel="stylesheet" />
+  <link href="{% static 'fontawesome-free-6.7.2-web/css/aos.css' %}" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-green-50 to-blue-50 text-gray-800 scroll-smooth">
+
+  <!-- Navbar -->
+  <nav class="bg-white/80 backdrop-blur-md shadow-md px-6 py-4 fixed top-0 w-full z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="{% url 'home' %}" class="text-2xl font-bold text-green-700">WellNest<span class="text-blue-500">+</span></a>
+
+      <div class="space-x-6 hidden md:flex">
+        <a href="{% url 'home' %}" class="hover:text-green-600 transition">Home</a>
+        <a href="#features" class="hover:text-green-600 transition">Features</a>
+        <a href="#reviews" class="hover:text-green-600 transition">Testimonials</a>
+        <a href="#contact" class="hover:text-green-600 transition">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Spacer -->
+  <div class="h-20"></div>
+
+  {% block content %}{% endblock %}
+
+  <!-- Floating Symptom Checker -->
+  <a href="{% if user.is_authenticated %}{% url 'symptom_checker' %}{% else %}{% url 'login' %}{% endif %}"
+     class="fixed bottom-6 right-6 z-50 bg-green-600 hover:bg-green-700 text-white w-14 h-14 flex items-center justify-center rounded-full shadow-lg transition">
+    🩺
+  </a>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 text-white pt-10 pb-6 mt-20">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+
+    <!-- About -->
+    <div>
+      <h4 class="text-xl font-semibold mb-4">🌿 About WellNest+</h4>
+      <p class="text-sm leading-relaxed">
+        WellNest+ is your AI-powered wellness companion. Get symptom-based predictions, book appointments, access medical records, and stay on top of your health — all in one place.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h4 class="text-xl font-semibold mb-4">🔗 Quick Links</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="{% url 'home' %}" class="hover:underline">🏠 Home</a></li>
+        <li><a href="{% url 'login' %}" class="hover:underline">🔐 Login</a></li>
+        <li><a href="{% url 'register_patient' %}" class="hover:underline">🧑‍⚕️ Patient Signup</a></li>
+        <li><a href="{% url 'register_doctor' %}" class="hover:underline">👨‍⚕️ Doctor Signup</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <h4 class="text-xl font-semibold mb-4">📞 Contact Us</h4>
+      <p class="text-sm">
+        📧 support@wellnestplus.com<br>
+        📱 +91-9876543210<br>
+        🏢 LPU Campus, Punjab, India
+      </p>
+    </div>
+
+    <!-- Social Media -->
+    <div>
+      <h4 class="text-xl font-semibold mb-4">📱 Connect with Us</h4>
+      <div class="flex space-x-4">
+        <a href="#" class="hover:text-gray-300 text-xl"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="hover:text-gray-300 text-xl"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="hover:text-gray-300 text-xl"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="hover:text-gray-300 text-xl"><i class="fab fa-instagram"></i></a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="text-center text-sm mt-10 border-t border-green-600 pt-4">
+    © 2025 WellNest+ | Built with ❤️ for better health
+  </div>
+</footer>
+
+
+  <!-- JS Scripts -->
+  <script src="{% static 'fontawesome-free-6.7.2-web/js/aos.js' %}"></script>
+  <script>
+      // noinspection JSUnresolvedReference
+    AOS.init({
+      once: false,
+      duration: 800,
+      offset: 120
+    });
+  </script>
+</body>
+</html>
+
+
+
+

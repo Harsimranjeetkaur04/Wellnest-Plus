@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Dashboard | WellNest+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome (local) -->
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/all.css' %}">
+
+    <!-- AOS CSS (local) -->
+    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/aos.css' %}">
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center">
+        <!-- Logo / Home -->
+        <div class="text-xl font-bold text-blue-600">
+            <a href="{% url 'dashboard:patient_dashboard' %}">WellNest+</a>
+        </div>
+
+        <!-- Right-side options -->
+        <div class="flex items-center gap-4">
+            <!-- Symptom Checker -->
+            <a href="{% url 'symptom_checker' %}" class="text-sm hover:underline flex items-center gap-1">
+                <i class="fas fa-stethoscope text-blue-500"></i>
+                Symptom Checker
+            </a>
+
+            <!-- Profile -->
+            <a href="{% url 'profile' %}" class="flex items-center gap-2">
+                <i class="fas fa-user-circle text-xl text-gray-600"></i>
+                <span class="text-sm font-medium">{{ user.first_name }}</span>
+            </a>
+
+            <!-- Logout -->
+            <form method="post" action="{% url 'logout' %}" class="inline">
+  {% csrf_token %}
+  <button type="submit" class="text-purple-700 hover:underline">
+    🔓 Logout
+  </button>
+</form>
+
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <main class="p-6">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white/80 backdrop-blur-md shadow-inner text-center text-sm text-gray-600 py-4 mt-10">
+        © 2025 WellNest+. All rights reserved.
+    </footer>
+
+    <!-- Floating Symptom Checker Button -->
+    <a href="{% url 'symptom_checker' %}"
+       class="fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 z-50"
+       title="Open Symptom Checker">
+        <i class="fas fa-stethoscope text-xl"></i>
+    </a>
+
+    <!-- AOS JS (local) -->
+    <script src="{% static 'fontawesome-free-6.7.2-web/js/aos.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            AOS.init();
+        });
+    </script>
+
+</body>
+</html>
