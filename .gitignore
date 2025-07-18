@@ -1,41 +1,21 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
 
 # Django
 *.log
 *.pot
-db.sqlite3
+*.pyc
 *.sqlite3
 media/
 staticfiles/
 .env
-.env.*
 
 # PyCharm
 .idea/
-*.iml
 
-# VS Code (optional)
+# VSCode (if using)
 .vscode/
 
-# Migrations (ignore compiled migration files but keep folder)
-**/migrations/*.pyc
-**/migrations/__pycache__/
-
-# OS-specific
-.DS_Store
-Thumbs.db
-
-# Virtual Environment
-.venv/
-venv/
-ENV/
-env/
+# Migrations
+**/migrations/
