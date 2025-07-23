@@ -39,7 +39,6 @@ def register_doctor(request):
     return render(request, 'accounts/register_doctor.html', {'form': form})
 
 
-
 def user_login(request):
     if request.method == 'POST':
         form = EmailAuthenticationForm(request.POST)
@@ -49,21 +48,22 @@ def user_login(request):
 
             # ✅ Role-based redirect using namespaced URLs
             if user.is_patient:
-                return redirect('patient_dashboard')
+                return redirect('dashboard:patient_dashboard')
             elif user.is_doctor:
-                return redirect('doctor_dashboard')
+                return redirect('dashboard:doctor_dashboard')
             elif user.is_superuser:
                 return redirect('/admin/')
+            else:
+                return redirect('home')  # fallback if user has no role
     else:
         form = EmailAuthenticationForm()
+
     return render(request, 'accounts/login.html', {'form': form})
 
 
 def user_logout(request):
     logout(request)
     return redirect('login')
-8
-
 # ---------------------------
 # Dashboards
 # ---------------------------

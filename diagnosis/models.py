@@ -1,11 +1,9 @@
 from django.db import models
 from accounts.models import CustomUser, Doctor
-from appointments.models import Appointment  # if appointment model exists
-
+from appointments.models import Appointment
 class Diagnosis(models.Model):
     patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='diagnoses')
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
-
     symptoms = models.TextField(blank=True, null=True)  # Optional if no AI used
     prediction = models.CharField(max_length=100, blank=True, null=True)  # Optional (AI use case)
     diagnosed_disease = models.CharField(max_length=100)  # ✅ Doctor will always fill this

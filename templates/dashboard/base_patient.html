@@ -1,78 +1,78 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Patient Dashboard | WellNest+</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Font Awesome (local) -->
-    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/all.css' %}">
-
-    <!-- AOS CSS (local) -->
-    <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/aos.css' %}">
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}WellNest+{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'fontawesome-free-6.7.2-web/css/all.css' %}">
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-100">
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-blue-800 to-green-600 text-white transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold">🌿 WellNest+</h2>
+        <button onclick="toggleSidebar()" class="text-white text-2xl">&times;</button>
+      </div>
+      <nav class="space-y-4 text-sm font-medium">
+        <a href="{% url 'patient_dashboard' %}" class="block hover:text-green-100">🏠 Dashboard</a>
+        <a href="{% url 'book_appointment' %}" class="block hover:text-green-100">📅 Appointments</a>
+        <a href="#" class="block hover:text-green-100">🧾 Diagnosis</a>
+        <a href="#" class="block hover:text-green-100">📊 Wellness Tracker</a>
+        <a href="{% url 'logout' %}" class="block text-red-200 hover:text-red-100">🚪 Logout</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div id="page-content" class="transition-all duration-300 min-h-screen">
 
     <!-- Navbar -->
-    <nav class="bg-white/80 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center">
-        <!-- Logo / Home -->
-        <div class="text-xl font-bold text-blue-600">
-            <a href="{% url 'dashboard:patient_dashboard' %}">WellNest+</a>
-        </div>
+    <header class="flex items-center justify-between bg-white shadow-md px-6 py-4 sticky top-0 z-30">
+      <div class="flex items-center gap-4">
+        <button onclick="toggleSidebar()" class="text-blue-800 text-3xl">&#9776;</button>
+        <span class="text-xl font-bold text-blue-800">WellNest+</span>
+      </div>
 
-        <!-- Right-side options -->
-        <div class="flex items-center gap-4">
-            <!-- Symptom Checker -->
-            <a href="{% url 'symptom_checker' %}" class="text-sm hover:underline flex items-center gap-1">
-                <i class="fas fa-stethoscope text-blue-500"></i>
-                Symptom Checker
-            </a>
+      <div class="flex items-center gap-6">
+        <a href="{% url 'symptom_checker' %}" class="text-blue-600 font-medium hover:underline">🩺 Symptom Checker</a>
+        <span class="flex items-center gap-2">
+          <a href="{% url 'profile' %}">
+            {% if request.user.is_authenticated and request.user.profile_photo %}
+              <img src="{{ request.user.profile_photo.url }}" class="w-10 h-10 rounded-full object-cover border border-gray-300" alt="Profile">
+            {% else %}
+              <img src="{% static 'default.png' %}" class="w-10 h-10 rounded-full object-cover border border-gray-300" alt="Profile">
+            {% endif %}
+          </a>
+          <span class="font-semibold text-gray-700">{{ request.user.first_name }}</span>
+        </span>
+        <a href="{% url 'logout' %}" class="text-red-500 hover:underline font-medium">🔒 Logout</a>
+      </div>
+    </header>
 
-            <!-- Profile -->
-            <a href="{% url 'profile' %}" class="flex items-center gap-2">
-                <i class="fas fa-user-circle text-xl text-gray-600"></i>
-                <span class="text-sm font-medium">{{ user.first_name }}</span>
-            </a>
-
-            <!-- Logout -->
-            <form method="post" action="{% url 'logout' %}" class="inline">
-  {% csrf_token %}
-  <button type="submit" class="text-purple-700 hover:underline">
-    🔓 Logout
-  </button>
-</form>
-
-        </div>
-    </nav>
-
-    <!-- Page Content -->
+    <!-- Main Content -->
     <main class="p-6">
-        {% block content %}
-        {% endblock %}
+      {% block content %}{% endblock %}
     </main>
+  </div>
 
-    <!-- Footer -->
-    <footer class="bg-white/80 backdrop-blur-md shadow-inner text-center text-sm text-gray-600 py-4 mt-10">
-        © 2025 WellNest+. All rights reserved.
-    </footer>
+  <!-- Toggle Script -->
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const pageContent = document.getElementById('page-content');
+      sidebar.classList.toggle('-translate-x-full');
 
-    <!-- Floating Symptom Checker Button -->
-    <a href="{% url 'symptom_checker' %}"
-       class="fixed bottom-6 right-6 bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 z-50"
-       title="Open Symptom Checker">
-        <i class="fas fa-stethoscope text-xl"></i>
-    </a>
-
-    <!-- AOS JS (local) -->
-    <script src="{% static 'fontawesome-free-6.7.2-web/js/aos.js' %}"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            AOS.init();
-        });
-    </script>
-
+      // Optional: shift content when sidebar opens
+      if (sidebar.classList.contains('-translate-x-full')) {
+        pageContent.classList.remove('ml-64');
+      } else {
+        pageContent.classList.add('ml-64');
+      }
+    }
+  </script>
 </body>
 </html>

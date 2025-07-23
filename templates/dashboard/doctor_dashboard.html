@@ -57,7 +57,8 @@
   {% if upcoming_appointments %}
     {% for appointment in upcoming_appointments %}
       <div class="bg-white p-4 mb-4 border rounded-md shadow-sm">
-        <h3 class="text-lg font-semibold text-indigo-700">{{ appointment.patient.get_full_name }}</h3>
+        <h3 class="text-lg font-semibold text-indigo-700">{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}
+</h3>
         <p class="text-sm text-gray-700">📅 {{ appointment.date }} | 🕒 {{ appointment.time }}</p>
         <p class="text-sm text-gray-600">📝 {{ appointment.reason }}</p>
 
@@ -169,14 +170,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
   visitsChart.render();
 
-  // Appointment Status Chart
   const statusChart = new ApexCharts(document.querySelector("#statusChart"), {
     chart: { type: 'donut', height: 300 },
-    series: [{{ confirmed_count }}, {{ pending_count }}],
-    labels: ['Confirmed', 'Pending'],
-    colors: ['#34d399', '#fbbf24']
+    series: [{{ visited_count }}, {{ not_visited_count }}],
+    labels: ['Visited', 'Not Visited'],
+    colors: ['#34d399', '#f87171']
   });
   statusChart.render();
+
 });
 
 // Patient Preview Modal
