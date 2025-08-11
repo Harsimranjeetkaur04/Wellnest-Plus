@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: sans-serif; font-size: 12px; }
+        h1, h2 { color: #1e3a8a; margin-bottom: 0; }
+        {#.header { display: flex; align-items: center; justify-content: space-between; }#}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #777;
+            padding: 6px;
+            text-align: left;
+        }
+        th {
+            background-color: #dbeafe;
+        }
+    </style>
+    <title>..</title>
+</head>
+<body>
+{#    <div class="header">#}
+{#        <img src="{{ STATIC_URL }}images/logo.png" width="120" height="40" alt="Clinic Logo">#}
+{#        <h1>Patient Report</h1>#}
+{#    </div>#}
+
+    <p><strong>Doctor:</strong> {{ doctor.user.first_name|default:"" }} {{ doctor.user.last_name|default:doctor.user.username }}</p>
+    <p><strong>Patient:</strong> {{ patient.get_full_name|default:patient.username }}</p>
+    <p><strong>Email:</strong> {{ patient.email }}</p>
+    <hr>
+
+    <h2>Appointments</h2>
+    <table>
+        <thead>
+            <tr><th>#</th><th>Date</th><th>Time</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for app in appointments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ app.date }}</td>
+                <td>{{ app.time }}</td>
+                <td>{{ app.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Diagnoses</h2>
+    <table>
+        <thead>
+            <tr><th>#</th><th>Disease</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+            {% for diag in diagnoses %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ diag.disease }}</td>
+                <td>{{ diag.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No diagnoses available</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

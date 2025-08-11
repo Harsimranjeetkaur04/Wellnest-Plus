@@ -17,8 +17,8 @@
   <div class="flex items-center space-x-6">
     <!-- Navigation Links -->
     <a href="{% url 'doctor_dashboard' %}" class="hover:text-indigo-600 font-medium">Dashboard</a>
-    <a href="#" class="hover:text-indigo-600 font-medium">Appointments</a>
-    <a href="#" class="hover:text-indigo-600 font-medium">Patient Records</a>
+    <a href="{% url 'dashboard:visited_patients' %}" class="hover:text-indigo-600 font-medium">Appointments</a>
+    <a href="{% url 'dashboard:reports_page' %}" class="hover:text-indigo-600 font-medium">📄 Reports</a>
 
     <!-- Notification Icon -->
     <a href="#" class="relative">

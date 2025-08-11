@@ -1,0 +1,105 @@
+{% extends "dashboard/base_doctor.html" %}
+{% load static %}
+
+{% block content %}
+<div class="p-6 space-y-12">
+
+  <!-- Visited Patients Section -->
+  <section>
+    <h2 class="text-3xl font-bold text-blue-700 mb-4">👩‍⚕️ Visited Patients</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm border-collapse rounded shadow-sm">
+        <thead class="bg-blue-100 text-blue-800 font-semibold uppercase text-xs border-b border-blue-300">
+          <tr>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Time</th>
+            <th class="px-4 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appointment in visited_appointments %}
+          <tr class="hover:bg-blue-50 transition">
+            <td class="px-4 py-2">
+              <a href="{% url 'dashboard:patient_detail' appointment.patient.id %}" class="text-blue-600 hover:underline">
+                {{ appointment.patient.get_full_name|default:appointment.patient.username }}
+              </a>
+            </td>
+            <td class="px-4 py-2">{{ appointment.date }}</td>
+            <td class="px-4 py-2">{{ appointment.time }}</td>
+            <td class="px-4 py-2 text-green-600 font-semibold">✔ Visited</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="px-4 py-3 italic text-gray-500">No visited patients yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Not Visited Patients Section -->
+  <section>
+    <h2 class="text-3xl font-bold text-green-700 mb-4">📅 Not Visited Patients</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm border-collapse rounded shadow-sm">
+        <thead class="bg-green-100 text-green-800 font-semibold uppercase text-xs border-b border-green-300">
+          <tr>
+            <th class="px-4 py-3">Name</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Time</th>
+            <th class="px-4 py-3">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for app in not_visited_appointments %}
+          <tr class="hover:bg-green-50 transition">
+            <td class="px-4 py-2">
+              <a href="{% url 'dashboard:patient_detail' app.patient.id %}" class="text-green-700 hover:underline">
+                {{ app.patient.get_full_name|default:app.patient.username }}
+              </a>
+            </td>
+            <td class="px-4 py-2">{{ app.date }}</td>
+            <td class="px-4 py-2">{{ app.time }}</td>
+            <td class="px-4 py-2 text-yellow-500 font-semibold">⏳ Upcoming</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" class="px-4 py-3 italic text-gray-500">No upcoming confirmed appointments.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<!-- Patient Preview Modal -->
+<div id="patientModal" class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center px-4">
+  <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md relative">
+    <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-500 text-xl">&times;</button>
+    <h3 class="text-xl font-bold mb-2 text-blue-700" id="modalName"></h3>
+    <p class="mb-1"><strong>🕒 Visited Time:</strong> <span id="modalTime" class="text-gray-700"></span></p>
+    <p><strong>📋 Issue:</strong> <span id="modalIssue" class="text-gray-700"></span></p>
+    <button onclick="closeModal()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+      Close
+    </button>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("patientModal");
+
+  function openModal(id) {
+    fetch(`/api/appointment-detail/${id}/`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById("modalName").innerText = data.name || "N/A";
+        document.getElementById("modalTime").innerText = data.date + " " + data.time;
+        document.getElementById("modalIssue").innerText = data.issue || "Not specified";
+        modal.classList.remove("hidden");
+      });
+  }
+
+  function closeModal() {
+    modal.classList.add("hidden");
+  }
+</script>
+{% endblock %}

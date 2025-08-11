@@ -90,9 +90,9 @@ WSGI_APPLICATION = 'wellnest_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wellnest_plus',
-        'USER': 'wellnest_usser',
-        'PASSWORD': '12345678',
+        'NAME': 'wellnest_database',
+        'USER': 'postgres',
+        'PASSWORD': 'Simr@n1204',
         'HOST': 'localhost',
         'PORT': '5432',
     }

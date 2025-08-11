@@ -1,0 +1,34 @@
+{% extends 'dashboard/base_doctor.html' %}
+{% load static %}
+
+{% block content %}
+<div class="p-6 space-y-6">
+    <h2 class="text-2xl font-bold">Patient Records</h2>
+
+    <div class="grid grid-cols-2 gap-4 mt-4">
+        <div class="bg-green-100 p-4 rounded-lg">
+            <h3 class="text-lg font-semibold text-green-700">Visited Patients</h3>
+            <p class="text-2xl">{{ visited }}</p>
+        </div>
+        <div class="bg-red-100 p-4 rounded-lg">
+            <h3 class="text-lg font-semibold text-red-700">Not Visited Patients</h3>
+            <p class="text-2xl">{{ not_visited }}</p>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        <h3 class="text-lg font-semibold">All Patients</h3>
+        <ul class="divide-y">
+            {% for patient in patients %}
+                <li class="py-3 hover:bg-gray-50 px-4 transition duration-200">
+                    <a href="{% url 'dashboard:patient_detail' patient.id %}" class="text-blue-600 hover:underline">
+                        {{ patient.first_name }} {{ patient.last_name }}
+                    </a>
+                </li>
+            {% empty %}
+                <li class="py-3 text-gray-500">No patients found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
