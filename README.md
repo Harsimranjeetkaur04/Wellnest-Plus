@@ -50,8 +50,3 @@ We are continually working to enhance WellNest+. Our roadmap includes:
 
 Instructions on how to set up and run the project locally will be added here soon.
 
----
-
-### License
-
-This project is licensed under the MIT License.
