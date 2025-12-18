@@ -1,4 +1,4 @@
-# WellNest+ 🩺
+# CareSync 🩺
 
 WellNest+ is a comprehensive healthcare platform designed to serve both patients and doctors. It provides an end-to-end solution that includes an **AI-powered symptom checker**, personalized dashboards, and a robust appointment management system to streamline healthcare interactions.
 
