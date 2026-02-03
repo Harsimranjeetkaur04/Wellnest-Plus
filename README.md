@@ -35,10 +35,3 @@ To run this project, you will need the following dependencies:
 * **PostgreSQL** database
 
 ---
-
----
-
-### Getting Started
-
-Instructions on how to set up and run the project locally will be added here soon.
-
