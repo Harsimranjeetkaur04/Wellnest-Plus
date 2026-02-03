@@ -1,6 +1,6 @@
 # CareSync 🩺
 
-WellNest+ is a comprehensive healthcare platform designed to serve both patients and doctors. It provides an end-to-end solution that includes an **AI-powered symptom checker**, personalized dashboards, and a robust appointment management system to streamline healthcare interactions.
+CareSync is a comprehensive healthcare platform designed to serve both patients and doctors. It provides an end-to-end solution that includes an **AI-powered symptom checker**, personalized dashboards, and a robust appointment management system to streamline healthcare interactions.
 
 ---
 
@@ -35,14 +35,6 @@ To run this project, you will need the following dependencies:
 * **PostgreSQL** database
 
 ---
-
-### Next Steps 🚀
-
-We are continually working to enhance WellNest+. Our roadmap includes:
-
-* Improving the accuracy of our AI model by training it on larger datasets and integrating deep learning techniques.
-* Developing a **React-based frontend** to create a more modern user experience and modular architecture.
-* Implementing real-time notifications and advanced **telemedicine features** to further connect patients and doctors.
 
 ---
 
